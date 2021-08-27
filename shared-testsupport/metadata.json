@@ -1,0 +1,9 @@
+{
+  "name" : "shared-testsupport",
+  "type": "library",
+  "version": "${library.version}",
+  "build": {
+    "time": "${build.time}",
+    "branch": "${build.branch}"
+  }
+}

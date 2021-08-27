@@ -1,0 +1,41 @@
+buildscript {
+    apply from: new File(rootProject.projectDir, "dependency-management.gradle")
+
+    repositories {
+        maven { url mavenPublicRepository }
+    }
+}
+
+apply plugin: "java"
+apply plugin: "maven-publish"
+apply plugin: io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+
+repositories {
+    maven { url mavenPublicRepository }
+}
+
+dependencyManagement {
+    dependencies {
+        project.buildBomVersions.each {
+            def (_, group, artifact, version) = it.tokenize( ':' )
+            dependency "$group:$artifact:$version"
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenBom(MavenPublication) {
+            version branchSpecificVersion
+            pom {
+                packaging = "pom"
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = mavenPublicRepository
+        }
+    }
+}

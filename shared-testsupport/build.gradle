@@ -1,0 +1,43 @@
+plugins {
+    id "com.github.prokod.gradle-crossbuild" version "0.12.1"
+}
+
+subprojects {
+    apply plugin: "scala"
+    apply plugin: "maven-publish"
+    apply plugin: 'com.github.prokod.gradle-crossbuild-scala'
+
+    crossBuild {
+        scalaVersionsCatalog = ['2.12':'2.12.12', '2.13':'2.13.6']
+
+        builds {
+            scala {
+                scalaVersions = ['2.12', '2.13']        // By default derived from build name in short hand build name
+                archive.appendixPattern = '_?'
+            }
+        }
+    }
+
+    buildDir = rootProject.file("build/$name")
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    publishing {
+        publications {
+            mavenLib(MavenPublication) {
+                from components.java
+            }
+
+            crossBuildScala_212(MavenPublication) {
+            }
+
+            crossBuildScala_213(MavenPublication) {
+            }
+        }
+    }
+}

@@ -1,0 +1,3 @@
+rootProject.projectDir.listFiles()
+    .findAll { it.isDirectory() && !it.name.startsWith(".") && new File(it, "build.gradle").exists() }
+    .each { include it.name }
